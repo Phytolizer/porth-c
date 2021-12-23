@@ -1,5 +1,6 @@
 #include <config.h>
 #include <iota.h>
+#include <ops_iota.h>
 #include <stdio.h>
 
 #include "porth/com.h"
@@ -11,7 +12,7 @@ static void PrintUsage(char* argv0);
 int main(int argc, char** argv) {
   Iota ops;
   IotaInit(&ops);
-  if (!IotaLoad(&ops, PROJECT_SOURCE_DIR "/porth/iota/ops.iota")) {
+  if (!IotaLoad(&ops, ops_iota, ops_iota_size)) {
     return 1;
   }
 

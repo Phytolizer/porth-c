@@ -23,30 +23,20 @@ void IotaInit(Iota* i) {
   IotaMap_init(&i->map);
 }
 
-bool IotaLoad(Iota* i, const char* filename) {
-  FILE* fp = fopen(filename, "r");
-  if (!fp) {
-    return false;
-  }
-
+bool IotaLoad(Iota* i, char* text, size_t length) {
+  char* savep;
   char* iota_prefix = NULL;
   size_t iota = 0;
 
-  char* line = NULL;
-  size_t line_size = 0;
-  while (getline(&line, &line_size, fp) != -1) {
-    if (line_size == 0) {
-      free(line);
-      line = NULL;
+  for (char* line = nonstd_strtok_r(text, "\n", &savep); line != NULL; line = nonstd_strtok_r(NULL, "\n", &savep)) {
+    if (strlen(line) == 0) {
       continue;
     }
-    *strrchr(line, '\n') = '\0';
     if (line[0] == '%') {
       char* savep;
       char* directive = nonstd_strtok_r(line, " ", &savep);
       if (directive == NULL) {
         fprintf(stderr, "Invalid directive: %s\n", line);
-        free(line);
         return false;
       }
 
@@ -54,28 +44,23 @@ bool IotaLoad(Iota* i, const char* filename) {
         char* prefix = nonstd_strtok_r(NULL, " ", &savep);
         if (prefix == NULL) {
           fprintf(stderr, "%%prefix requires an argument\n");
-          free(line);
           return false;
         }
         iota_prefix = nonstd_strdup(prefix);
       } else {
         fprintf(stderr, "Unrecognized directive: %s\n", line);
-        free(line);
         return false;
       }
     } else {
       if (strcmp(line, "COUNT") == 0) {
         fprintf(stderr, "\"COUNT\" is reserved\n");
-        free(line);
         return false;
       }
       IotaAdd(i, line, iota_prefix, iota);
       ++iota;
     }
-    free(line);
     line = NULL;
   }
-  free(line);
 
   IotaAdd(i, "COUNT", iota_prefix, iota);
   i->count = iota;

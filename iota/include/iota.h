@@ -22,6 +22,6 @@ typedef struct {
 void IotaEntryDeinit(IotaEntry entry);
 
 void IotaInit(Iota* i);
-bool IotaLoad(Iota* i, const char* filename);
+bool IotaLoad(Iota* i, char* text, size_t length);
 size_t IotaValue(Iota* i, char* name);
 void IotaDeinit(Iota i);

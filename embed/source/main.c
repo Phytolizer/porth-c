@@ -89,7 +89,7 @@ int main(int argc, const char** argv) {
   fputs("\n", outp);
   fputs("#include <stddef.h>\n", outp);
   fputs("\n", outp);
-  fprintf(outp, "extern const char %s[];\n", symbol_name);
+  fprintf(outp, "extern char %s[];\n", symbol_name);
   fprintf(outp, "extern const size_t %s_size;\n", symbol_name);
   fputs("\n", outp);
   fprintf(outp, "#endif /* %s */\n", header_guard);
@@ -114,7 +114,7 @@ int main(int argc, const char** argv) {
       }
     }
   }
-  fprintf(outp, "const char %s[] =\n", symbol_name);
+  fprintf(outp, "char %s[] =\n", symbol_name);
   char* saveptr;
   for (char* line = nonstd_strtok_r(input, "\n", &saveptr); line != NULL;
        line = nonstd_strtok_r(NULL, "\n", &saveptr)) {
