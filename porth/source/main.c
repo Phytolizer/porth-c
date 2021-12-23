@@ -3,11 +3,12 @@
 #include <stdio.h>
 
 int main(int argc, char** argv) {
-  Iota i;
-  IotaInit(&i);
-  if (!IotaLoad(&i, PROJECT_SOURCE_DIR "/porth/iota/ops.iota")) {
+  Iota ops;
+  IotaInit(&ops);
+  if (!IotaLoad(&ops, PROJECT_SOURCE_DIR "/porth/iota/ops.iota")) {
     return 1;
   }
+  printf("Loaded %zu ops\n", ops.count);
 
-  IotaDeinit(i);
+  IotaDeinit(ops);
 }

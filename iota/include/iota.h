@@ -16,6 +16,7 @@ TOOLBOX_HASH_DECLARE(IotaMap, size_t);
 typedef struct {
   IotaEntryVec entries;
   IotaMap map;
+  size_t count;
 } Iota;
 
 void IotaEntryDeinit(IotaEntry entry);

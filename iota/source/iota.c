@@ -13,6 +13,9 @@ TOOLBOX_HASH_IMPLEMENT(IotaMap, size_t,
                        TOOLBOX_HASH_DESTRUCTOR_KEY(IotaMap, free),
                        TOOLBOX_HASH_MAX_LOAD_DEFAULT);
 
+static void IotaAdd(Iota* i, const char* line, const char* iota_prefix,
+                    size_t iota);
+
 void IotaEntryDeinit(IotaEntry entry) { free(entry.name); }
 
 void IotaInit(Iota* i) {
@@ -61,26 +64,20 @@ bool IotaLoad(Iota* i, const char* filename) {
         return false;
       }
     } else {
-      char* name;
-      size_t name_len;
-      if (iota_prefix != NULL) {
-        name_len = strlen(iota_prefix) + strlen(line) + 1;
-        name = malloc(name_len);
-        strcpy(name, iota_prefix);
-        strcat(name, line);
-      } else {
-        name_len = strlen(line);
-        name = nonstd_strdup(line);
+      if (strcmp(line, "COUNT") == 0) {
+        fprintf(stderr, "\"COUNT\" is reserved\n");
+        free(line);
+        return false;
       }
-      IotaEntryVec_push(
-          &i->entries, (IotaEntry){.name = nonstd_strdup(name), .value = iota});
-      IotaMap_insert(&i->map, (IotaMap_key){.key = name, .len = name_len},
-                     iota);
+      IotaAdd(i, line, iota_prefix, iota);
       ++iota;
     }
     free(line);
     line = NULL;
   }
+
+  IotaAdd(i, "COUNT", iota_prefix, iota);
+  i->count = iota;
 
   free(iota_prefix);
   return true;
@@ -89,4 +86,21 @@ bool IotaLoad(Iota* i, const char* filename) {
 void IotaDeinit(Iota i) {
   IotaEntryVec_deinit(&i.entries);
   IotaMap_deinit(&i.map);
+}
+
+void IotaAdd(Iota* i, const char* line, const char* iota_prefix, size_t iota) {
+  char* name;
+  size_t name_len;
+  if (iota_prefix != NULL) {
+    name_len = strlen(iota_prefix) + strlen(line) + 1;
+    name = malloc(name_len);
+    strcpy(name, iota_prefix);
+    strcat(name, line);
+  } else {
+    name_len = strlen(line);
+    name = nonstd_strdup(line);
+  }
+  IotaEntryVec_push(&i->entries,
+                    (IotaEntry){.name = nonstd_strdup(name), .value = iota});
+  IotaMap_insert(&i->map, (IotaMap_key){.key = name, .len = name_len}, iota);
 }
