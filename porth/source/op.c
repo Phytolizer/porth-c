@@ -24,6 +24,15 @@ Op* OpCreatePlus(Iota* ops) {
   return nonstd_memdup(&result, sizeof(result));
 }
 
+Op* OpCreateMinus(Iota* ops)
+{
+  Op result = {
+    .type = IotaValue(ops, "OP_MINUS"),
+    .ops = ops,
+  };
+  return nonstd_memdup(&result, sizeof(result));
+}
+
 Op* OpCreateDump(Iota* ops) {
   Op result = {
       .type = IotaValue(ops, "OP_DUMP"),

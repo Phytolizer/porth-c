@@ -75,6 +75,7 @@ bool IotaLoad(Iota* i, const char* filename) {
     free(line);
     line = NULL;
   }
+  free(line);
 
   IotaAdd(i, "COUNT", iota_prefix, iota);
   i->count = iota;

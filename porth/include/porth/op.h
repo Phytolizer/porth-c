@@ -18,5 +18,6 @@ typedef struct {
 
 Op* OpCreatePush(Iota* ops, int64_t value);
 Op* OpCreatePlus(Iota* ops);
+Op* OpCreateMinus(Iota* ops);
 Op* OpCreateDump(Iota* ops);
 void OpFree(Op* op);
