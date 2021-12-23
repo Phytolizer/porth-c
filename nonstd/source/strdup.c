@@ -19,7 +19,7 @@ char* nonstd_strndup(const char* str, size_t n)
     return result;
 }
 
-char* nonstd_memdup(const void* mem, size_t nbytes)
+void* nonstd_memdup(const void* mem, size_t nbytes)
 {
     void* result = malloc(nbytes);
     memcpy(result, mem, nbytes);

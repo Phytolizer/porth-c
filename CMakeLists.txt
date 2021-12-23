@@ -38,7 +38,7 @@ push_directory_executable(
   TARGET_NAME porth
   SOURCE_DIRECTORY_COMES_LAST
   SOURCE_DIRECTORY source
-  SOURCE_FILES main.c
-  INCLUDED_DIRECTORIES "${PROJECT_BINARY_DIR}/include"
+  SOURCE_FILES main.c op.c sim.c com.c
+  INCLUDED_DIRECTORIES porth/include "${PROJECT_BINARY_DIR}/include"
   LINKED_LIBRARIES iota toolbox
 )
