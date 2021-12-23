@@ -95,7 +95,7 @@ uint64_t ToolboxHashFnv1a(const void* data, size_t len);
     if (capacity == 0) {                                                 \
       return NULL;                                                       \
     }                                                                    \
-    uint64_t h = Hash_FNV1a(key.key, key.len) % capacity;                \
+    uint64_t h = ToolboxHashFnv1a(key.key, key.len) % capacity;          \
     while (buckets[h].present &&                                         \
            !(buckets[h].key.len == key.len &&                            \
              memcmp(buckets[h].key.key, key.key, key.len) == 0)) {       \
