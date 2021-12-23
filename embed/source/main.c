@@ -63,13 +63,47 @@ int main(int argc, const char** argv) {
     fprintf(stderr, "output filename should end with \".c\"\n");
     return 1;
   }
+
+  dotc[1] = 'h';
   FILE* outp = fopen(output_path, "w");
+  if (outp == NULL) {
+    fprintf(stderr, "Can't write output header %s: %s\n", output_path,
+            strerror(errno));
+    return 1;
+  }
+
+  size_t output_path_len = strlen(output_path);
+  char* header_guard = malloc(output_path_len + 2);
+  for (size_t i = 0; i < output_path_len; ++i) {
+    if (!isalnum(output_path[i])) {
+      header_guard[i] = '_';
+    } else {
+      header_guard[i] = toupper(output_path[i]);
+    }
+  }
+  header_guard[output_path_len] = '\0';
+  strcat(header_guard, "_");
+
+  fprintf(outp, "#ifndef %s\n", header_guard);
+  fprintf(outp, "#define %s\n", header_guard);
+  fputs("\n", outp);
+  fputs("#include <stddef.h>\n", outp);
+  fputs("\n", outp);
+  fprintf(outp, "extern const char %s[];\n", symbol_name);
+  fprintf(outp, "extern const size_t %s_size;\n", symbol_name);
+  fputs("\n", outp);
+  fprintf(outp, "#endif /* %s */\n", header_guard);
+  fclose(outp);
+
+  dotc[1] = 'c';
+  outp = fopen(output_path, "w");
+  dotc[1] = 'h';
   if (outp == NULL) {
     fprintf(stderr, "could not open %s for writing: %s\n", output_path,
             strerror(errno));
     return 1;
   }
-  fprintf(outp, "#include \"%s_embed.h\"\n\n", argv[0]);
+  fprintf(outp, "#include \"%s\"\n\n", output_path);
   bool symbol_name_malloced = false;
   if (symbol_name == NULL) {
     symbol_name = nonstd_strdup(argv[0]);
@@ -97,34 +131,7 @@ int main(int argc, const char** argv) {
     fputs("\\n\"\n", outp);
   }
   fprintf(outp, ";\n");
-  fclose(outp);
-
-  dotc[1] = 'h';
-  outp = fopen(output_path, "w");
-  if (outp == NULL) {
-    fprintf(stderr, "Can't write output header %s: %s\n", output_path,
-            strerror(errno));
-    return 1;
-  }
-
-  size_t output_path_len = strlen(output_path);
-  char* header_guard = malloc(output_path_len + 2);
-  for (size_t i = 0; i < output_path_len; ++i) {
-    if (!isalnum(output_path[i])) {
-      header_guard[i] = '_';
-    } else {
-      header_guard[i] = toupper(output_path[i]);
-    }
-  }
-  header_guard[output_path_len] = '\0';
-  strcat(header_guard, "_");
-
-  fprintf(outp, "#ifndef %s\n", header_guard);
-  fprintf(outp, "#define %s\n", header_guard);
-  fputs("\n", outp);
-  fprintf(outp, "extern const char %s[];\n", symbol_name);
-  fputs("\n", outp);
-  fprintf(outp, "#endif /* %s */\n", header_guard);
+  fprintf(outp, "const size_t %s_size = %d;\n", symbol_name, inlen);
   fclose(outp);
 
   if (outpath_malloced) {
