@@ -83,6 +83,11 @@ bool IotaLoad(Iota* i, const char* filename) {
   return true;
 }
 
+size_t IotaValue(Iota* i, char* name) {
+  return *IotaMap_lookup(&i->map,
+                         (IotaMap_key){.key = name, .len = strlen(name)});
+}
+
 void IotaDeinit(Iota i) {
   IotaEntryVec_deinit(&i.entries);
   IotaMap_deinit(&i.map);
@@ -92,8 +97,8 @@ void IotaAdd(Iota* i, const char* line, const char* iota_prefix, size_t iota) {
   char* name;
   size_t name_len;
   if (iota_prefix != NULL) {
-    name_len = strlen(iota_prefix) + strlen(line) + 1;
-    name = malloc(name_len);
+    name_len = strlen(iota_prefix) + strlen(line);
+    name = malloc(name_len + 1);
     strcpy(name, iota_prefix);
     strcat(name, line);
   } else {

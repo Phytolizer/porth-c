@@ -23,4 +23,5 @@ void IotaEntryDeinit(IotaEntry entry);
 
 void IotaInit(Iota* i);
 bool IotaLoad(Iota* i, const char* filename);
+size_t IotaValue(Iota* i, char* name);
 void IotaDeinit(Iota i);

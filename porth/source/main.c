@@ -9,6 +9,7 @@ int main(int argc, char** argv) {
     return 1;
   }
   printf("Loaded %zu ops\n", ops.count);
+  printf("OP_DUMP: %zu\n", IotaValue(&ops, "OP_DUMP"));
 
   IotaDeinit(ops);
 }
