@@ -11,9 +11,17 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/PushDirectory")
 include(PushDirectory)
 
 push_directory_library(
+  TARGET_NAME toolbox
+  SOURCE_DIRECTORY_COMES_LAST
+  SOURCE_DIRECTORY source
+  SOURCE_FILES hash.c
+  INCLUDED_DIRECTORIES toolbox/include
+)
+push_directory_library(
   TARGET_NAME iota
   SOURCE_DIRECTORY_COMES_LAST
   SOURCE_DIRECTORY source
   SOURCE_FILES iota.c
   INCLUDED_DIRECTORIES iota/include
+  LINKED_LIBRARIES toolbox
 )
