@@ -1,7 +1,9 @@
 #include <config.h>
 #include <iota.h>
 #include <stdio.h>
+
 #include "porth/op.h"
+#include "porth/sim.h"
 
 int main(int argc, char** argv) {
   Iota ops;
@@ -18,7 +20,8 @@ int main(int argc, char** argv) {
   OpVec_push(&program, OpCreatePlus(&ops));
   OpVec_push(&program, OpCreateDump(&ops));
 
-  OpVec_deinit(&program);
+  SimulateProgram(&ops, &program);
 
+  OpVec_deinit(&program);
   IotaDeinit(ops);
 }
