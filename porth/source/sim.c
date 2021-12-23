@@ -8,7 +8,7 @@ TOOLBOX_VECTOR_IMPLEMENT(IntVec, int64_t,
                          TOOLBOX_VECTOR_DESTRUCTOR_NONE(IntVec));
 
 void SimulateProgram(Iota* ops, OpVec* program) {
-  assert(ops->count == 3 && " doesn't support enough ops");
+  assert(ops->count == 3 && "doesn't support enough ops");
   IntVec stack;
   IntVec_init(&stack);
   for (size_t i = 0; i < program->length; ++i) {
