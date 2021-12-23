@@ -2,8 +2,11 @@
 #include <iota.h>
 #include <stdio.h>
 
+#include "porth/com.h"
 #include "porth/op.h"
 #include "porth/sim.h"
+
+static void PrintUsage(char* argv0);
 
 int main(int argc, char** argv) {
   Iota ops;
@@ -24,8 +27,30 @@ int main(int argc, char** argv) {
   OpVec_push(&program, OpCreateMinus(&ops));
   OpVec_push(&program, OpCreateDump(&ops));
 
-  SimulateProgram(&ops, &program);
+  if (argc < 2) {
+    PrintUsage(argv[0]);
+    fprintf(stderr, "ERROR: no subcommand provided\n");
+    return 1;
+  }
+
+  char* subcommand = argv[1];
+  if (strcmp(subcommand, "sim") == 0) {
+    SimulateProgram(&ops, &program);
+  } else if (strcmp(subcommand, "com") == 0) {
+    CompileProgram(&ops, &program);
+  } else {
+    PrintUsage(argv[0]);
+    fprintf(stderr, "ERROR: unknown subcommand %s\n", subcommand);
+    return 1;
+  }
 
   OpVec_deinit(&program);
   IotaDeinit(ops);
+}
+
+void PrintUsage(char* argv0) {
+  fprintf(stderr, "Usage: %s <SUBCMD> [ARGS]\n", argv0);
+  fprintf(stderr, "SUBCMD:\n");
+  fprintf(stderr, "   sim     Simulate the program\n");
+  fprintf(stderr, "   com     Compile the program\n");
 }
