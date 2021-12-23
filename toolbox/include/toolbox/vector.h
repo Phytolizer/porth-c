@@ -7,7 +7,8 @@
 #define TOOLBOX_VECTOR_PROTOTYPES_(VectorType, DataType) \
   void VectorType##_init(VectorType* v);                 \
   void VectorType##_deinit(VectorType* v);               \
-  void VectorType##_push(VectorType* v, DataType value)
+  void VectorType##_push(VectorType* v, DataType value); \
+  DataType VectorType##_pop(VectorType* v)
 
 #define TOOLBOX_VECTOR_DECLARE(VectorType, DataType) \
   typedef struct {                                   \
@@ -56,8 +57,12 @@
     v->data[v->length++] = value;                                 \
   }
 
+#define TOOLBOX_VECTOR_IMPL_POP_(VectorType, DataType) \
+  DataType VectorType##_pop(VectorType* v) { return v->data[--v->length]; }
+
 #define TOOLBOX_VECTOR_IMPLEMENT(VectorType, DataType, Destructor) \
   TOOLBOX_VECTOR_IMPL_INIT_(VectorType)                            \
   TOOLBOX_VECTOR_IMPL_DEINIT_(VectorType, DataType, Destructor)    \
   TOOLBOX_VECTOR_IMPL_PUSH_(VectorType, DataType)                  \
+  TOOLBOX_VECTOR_IMPL_POP_(VectorType, DataType)                   \
   static bool VectorType##_IS_IMPLEMENTED_ = true
