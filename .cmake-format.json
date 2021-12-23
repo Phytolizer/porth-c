@@ -17,12 +17,15 @@
         "flags": [
           "TARGET_NAME",
           "SOURCE_FILES",
+          "SOURCE_DIRECTORY_COMES_LAST",
+          "SOURCE_DIRECTORY",
           "INCLUDED_DIRECTORIES",
           "LINKED_LIBRARIES"
         ],
         "kwargs": {
           "TARGET_NAME": "1",
           "SOURCE_FILES": "*",
+          "SOURCE_DIRECTORY": "1",
           "INCLUDED_DIRECTORIES": "*",
           "LINKED_LIBRARIES": "*"
         }
@@ -31,21 +34,21 @@
         "flags": [
           "TARGET_NAME",
           "SOURCE_FILES",
+          "SOURCE_DIRECTORY_COMES_LAST",
+          "SOURCE_DIRECTORY",
           "INCLUDED_DIRECTORIES",
           "LINKED_LIBRARIES"
         ],
         "kwargs": {
           "TARGET_NAME": "1",
           "SOURCE_FILES": "*",
+          "SOURCE_DIRECTORY": "1",
           "INCLUDED_DIRECTORIES": "*",
           "LINKED_LIBRARIES": "*"
         }
       },
       "advent": {
-        "flags": [
-          "EXTRA_SOURCES",
-          "EXTRA_LIBRARIES"
-        ],
+        "flags": ["EXTRA_SOURCES", "EXTRA_LIBRARIES"],
         "kwargs": {
           "EXTRA_SOURCES": "*",
           "EXTRA_LIBRARIES": "*"
