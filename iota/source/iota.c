@@ -23,12 +23,15 @@ void IotaInit(Iota* i) {
   IotaMap_init(&i->map);
 }
 
-bool IotaLoad(Iota* i, char* text, size_t length) {
+bool IotaLoad(Iota* i, const char* text, size_t length) {
   char* savep;
   char* iota_prefix = NULL;
   size_t iota = 0;
 
-  for (char* line = nonstd_strtok_r(text, "\n", &savep); line != NULL; line = nonstd_strtok_r(NULL, "\n", &savep)) {
+  char* text_dup = nonstd_strdup(text);
+
+  for (char* line = nonstd_strtok_r(text_dup, "\n", &savep); line != NULL;
+       line = nonstd_strtok_r(NULL, "\n", &savep)) {
     if (strlen(line) == 0) {
       continue;
     }
@@ -66,6 +69,7 @@ bool IotaLoad(Iota* i, char* text, size_t length) {
   i->count = iota;
 
   free(iota_prefix);
+  free(text_dup);
   return true;
 }
 
