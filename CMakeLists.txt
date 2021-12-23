@@ -1,0 +1,19 @@
+cmake_minimum_required(VERSION 3.12...3.22)
+
+project(
+  "porth-c"
+  LANGUAGES "C"
+  VERSION "0.1.0"
+  DESCRIPTION "Porth in C"
+)
+
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/PushDirectory")
+include(PushDirectory)
+
+push_directory_library(
+  TARGET_NAME iota
+  SOURCE_DIRECTORY_COMES_LAST
+  SOURCE_DIRECTORY source
+  SOURCE_FILES iota.c
+  INCLUDED_DIRECTORIES iota/include
+)

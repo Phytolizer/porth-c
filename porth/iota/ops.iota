@@ -1,0 +1,4 @@
+%prefix OP_
+PUSH
+PLUS
+DUMP
