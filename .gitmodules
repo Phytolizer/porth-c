@@ -1,0 +1,3 @@
+[submodule "cmake/PushDirectory"]
+	path = cmake/PushDirectory
+	url = https://github.com/Phytolizer/PushDirectory.cmake
