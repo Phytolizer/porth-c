@@ -13,6 +13,13 @@ include(PushDirectory)
 configure_file("cmake/config.h.cin" "${PROJECT_BINARY_DIR}/include/config.h")
 
 push_directory_library(
+  TARGET_NAME argparse
+  SOURCE_DIRECTORY_COMES_LAST
+  SOURCE_DIRECTORY source
+  SOURCE_FILES argparse.c
+  INCLUDED_DIRECTORIES argparse/include
+)
+push_directory_library(
   TARGET_NAME toolbox
   SOURCE_DIRECTORY_COMES_LAST
   SOURCE_DIRECTORY source
@@ -41,4 +48,11 @@ push_directory_executable(
   SOURCE_FILES main.c op.c sim.c com.c
   INCLUDED_DIRECTORIES porth/include "${PROJECT_BINARY_DIR}/include"
   LINKED_LIBRARIES iota toolbox
+)
+push_directory_executable(
+  TARGET_NAME embed
+  SOURCE_DIRECTORY_COMES_LAST
+  SOURCE_DIRECTORY source
+  SOURCE_FILES main.c
+  LINKED_LIBRARIES argparse nonstd
 )
