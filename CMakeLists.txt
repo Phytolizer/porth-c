@@ -10,6 +10,8 @@ project(
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/PushDirectory")
 include(PushDirectory)
 
+configure_file("cmake/config.h.cin" "${PROJECT_BINARY_DIR}/include/config.h")
+
 push_directory_library(
   TARGET_NAME toolbox
   SOURCE_DIRECTORY_COMES_LAST
@@ -31,4 +33,12 @@ push_directory_library(
   SOURCE_FILES iota.c
   INCLUDED_DIRECTORIES iota/include
   LINKED_LIBRARIES toolbox nonstd
+)
+push_directory_executable(
+  TARGET_NAME porth
+  SOURCE_DIRECTORY_COMES_LAST
+  SOURCE_DIRECTORY source
+  SOURCE_FILES main.c
+  INCLUDED_DIRECTORIES "${PROJECT_BINARY_DIR}/include"
+  LINKED_LIBRARIES iota toolbox
 )
