@@ -2,11 +2,11 @@
 #include <iota.h>
 #include <ops_iota.h>
 #include <stdio.h>
+#include <subprocess.h>
 
 #include "porth/com.h"
 #include "porth/op.h"
 #include "porth/sim.h"
-#include "subprocess.h"
 
 static void PrintUsage(char* argv0);
 
