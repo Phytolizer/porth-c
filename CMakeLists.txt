@@ -41,13 +41,20 @@ push_directory_library(
   INCLUDED_DIRECTORIES iota/include
   LINKED_LIBRARIES toolbox nonstd
 )
+push_directory_library(
+  TARGET_NAME subprocess
+  SOURCE_DIRECTORY_COMES_LAST
+  SOURCE_DIRECTORY source
+  SOURCE_FILES dummy.c
+  INCLUDED_DIRECTORIES subprocess/include
+)
 push_directory_executable(
   TARGET_NAME porth OUTPUT_NAME porth.exe
   SOURCE_DIRECTORY_COMES_LAST
   SOURCE_DIRECTORY source
   SOURCE_FILES main.c op.c sim.c com.c
   INCLUDED_DIRECTORIES porth/include "${PROJECT_BINARY_DIR}/include"
-  LINKED_LIBRARIES iota toolbox
+  LINKED_LIBRARIES iota toolbox subprocess
 )
 push_directory_executable(
   TARGET_NAME embed
