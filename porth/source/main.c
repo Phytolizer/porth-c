@@ -9,6 +9,7 @@
 #include "porth/sim.h"
 
 static void PrintUsage(char* argv0);
+static int SpawnProcess(const char** argv);
 
 int main(int argc, char** argv) {
   Iota ops;
@@ -40,41 +41,15 @@ int main(int argc, char** argv) {
   } else if (strcmp(subcommand, "com") == 0) {
     CompileProgram(&ops, &program, "output.asm");
     const char* nasm_command_line[] = {
-        "nasm",
-        "-f",
-        "elf64",
-        "output.asm",
+        "/usr/bin/nasm", "-f", "elf64", "output.asm", NULL,
     };
     const char* ld_command_line[] = {
-        "ld",
-        "-o",
-        "output",
-        "output.o",
+        "/usr/bin/ld", "-o", "output", "output.o", NULL,
     };
-    struct subprocess_s process;
-    int ret = subprocess_create(
-        nasm_command_line,
-        subprocess_option_no_window | subprocess_option_combined_stdout_stderr,
-        &process);
-    if (ret != 0) {
-      fprintf(stderr, "ERROR: subprocess creation failed!\n");
+    if (SpawnProcess(nasm_command_line) != 0) {
       return 1;
     }
-    int return_code;
-    ret = subprocess_join(&process, &return_code);
-    if (ret != 0) {
-      fprintf(stderr, "ERROR: subprocess joining failed!\n");
-      return 1;
-    }
-    FILE* err = subprocess_stderr(&process);
-    char errbuf[1024];
-    int nread;
-    while (err != NULL &&
-           (nread = fread(errbuf, 1, sizeof(errbuf), err)) != 0) {
-      fwrite(errbuf, 1, nread, stderr);
-    }
-    if (return_code != 0) {
-      fprintf(stderr, "ERROR: subprocess exited with code %d\n", return_code);
+    if (SpawnProcess(ld_command_line) != 0) {
       return 1;
     }
   } else {
@@ -92,4 +67,34 @@ void PrintUsage(char* argv0) {
   fprintf(stderr, "SUBCMD:\n");
   fprintf(stderr, "   sim     Simulate the program\n");
   fprintf(stderr, "   com     Compile the program\n");
+}
+
+int SpawnProcess(const char** argv) {
+  struct subprocess_s process;
+  int ret = subprocess_create(
+      argv,
+      subprocess_option_no_window | subprocess_option_combined_stdout_stderr,
+      &process);
+  if (ret != 0) {
+    fprintf(stderr, "ERROR: subprocess creation failed!\n");
+    return 1;
+  }
+  int return_code;
+  ret = subprocess_join(&process, &return_code);
+  if (ret != 0) {
+    fprintf(stderr, "ERROR: subprocess joining failed!\n");
+    return 1;
+  }
+  FILE* err = subprocess_stderr(&process);
+  char errbuf[1024];
+  int nread;
+  while (err != NULL && (nread = fread(errbuf, 1, sizeof(errbuf), err)) != 0) {
+    fwrite(errbuf, 1, nread, stderr);
+  }
+  if (return_code != 0) {
+    fprintf(stderr, "ERROR: subprocess exited with code %d\n", return_code);
+    return 1;
+  }
+  subprocess_destroy(&process);
+  return 0;
 }

@@ -1,3 +1,5 @@
 /build*
 /.cache
 output.asm
+output.o
+output
