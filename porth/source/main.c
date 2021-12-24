@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
   if (strcmp(subcommand, "sim") == 0) {
     SimulateProgram(&ops, &program);
   } else if (strcmp(subcommand, "com") == 0) {
-    CompileProgram(&ops, &program);
+    CompileProgram(&ops, &program, "output.asm");
   } else {
     PrintUsage(argv[0]);
     fprintf(stderr, "ERROR: unknown subcommand %s\n", subcommand);

@@ -4,4 +4,4 @@
 
 #include "porth/op.h"
 
-char* CompileProgram(Iota* ops, OpVec* program);
+void CompileProgram(Iota* ops, OpVec* program, const char* out_path);

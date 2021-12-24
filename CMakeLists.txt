@@ -42,8 +42,7 @@ push_directory_library(
   LINKED_LIBRARIES toolbox nonstd
 )
 push_directory_executable(
-  TARGET_NAME porth
-  OUTPUT_NAME porth.exe
+  TARGET_NAME porth OUTPUT_NAME porth.exe
   SOURCE_DIRECTORY_COMES_LAST
   SOURCE_DIRECTORY source
   SOURCE_FILES main.c op.c sim.c com.c
@@ -68,3 +67,14 @@ add_custom_command(
 )
 target_sources(porth PRIVATE "${PROJECT_BINARY_DIR}/porth/iota/ops_iota.c")
 target_include_directories(porth PRIVATE "${PROJECT_BINARY_DIR}/porth/iota")
+add_custom_command(
+  OUTPUT "${PROJECT_BINARY_DIR}/porth/asmt/main_asmt.c"
+         "${PROJECT_BINARY_DIR}/porth/asmt/main_asmt.h"
+  DEPENDS embed
+  COMMAND "${CMAKE_COMMAND}" -E make_directory
+          "${PROJECT_BINARY_DIR}/porth/asmt"
+  COMMAND "$<TARGET_FILE:embed>" "${PROJECT_SOURCE_DIR}/porth/asmt/main.asmt"
+          -o "${PROJECT_BINARY_DIR}/porth/asmt/main_asmt.c" -s "main_asmt"
+)
+target_sources(porth PRIVATE "${PROJECT_BINARY_DIR}/porth/asmt/main_asmt.c")
+target_include_directories(porth PRIVATE "${PROJECT_BINARY_DIR}/porth/asmt")
