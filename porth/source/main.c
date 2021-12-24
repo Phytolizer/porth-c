@@ -61,11 +61,16 @@ int main(int argc, char** argv) {
       return 1;
     }
     int return_code;
-    subprocess_join(&process, &return_code);
+    ret = subprocess_join(&process, &return_code);
+    if (ret != 0) {
+      fprintf(stderr, "ERROR: subprocess joining failed!\n");
+      return 1;
+    }
     FILE* err = subprocess_stderr(&process);
     char errbuf[1024];
     int nread;
-    while ((nread = fread(errbuf, 1, sizeof(errbuf), err)) != 0) {
+    while (err != NULL &&
+           (nread = fread(errbuf, 1, sizeof(errbuf), err)) != 0) {
       fwrite(errbuf, 1, nread, stderr);
     }
     if (return_code != 0) {
