@@ -75,13 +75,20 @@ add_custom_command(
 target_sources(porth PRIVATE "${PROJECT_BINARY_DIR}/porth/iota/ops_iota.c")
 target_include_directories(porth PRIVATE "${PROJECT_BINARY_DIR}/porth/iota")
 add_custom_command(
-  OUTPUT "${PROJECT_BINARY_DIR}/porth/asmt/main_asmt.c"
-         "${PROJECT_BINARY_DIR}/porth/asmt/main_asmt.h"
+  OUTPUT "${PROJECT_BINARY_DIR}/porth/asmt/prefix_asmt.c"
+         "${PROJECT_BINARY_DIR}/porth/asmt/prefix_asmt.h"
+         "${PROJECT_BINARY_DIR}/porth/asmt/suffix_asmt.c"
+         "${PROJECT_BINARY_DIR}/porth/asmt/suffix_asmt.h"
   DEPENDS embed
   COMMAND "${CMAKE_COMMAND}" -E make_directory
           "${PROJECT_BINARY_DIR}/porth/asmt"
-  COMMAND "$<TARGET_FILE:embed>" "${PROJECT_SOURCE_DIR}/porth/asmt/main.asmt"
-          -o "${PROJECT_BINARY_DIR}/porth/asmt/main_asmt.c" -s "main_asmt"
+  COMMAND "$<TARGET_FILE:embed>" "${PROJECT_SOURCE_DIR}/porth/asmt/prefix.asmt"
+          -o "${PROJECT_BINARY_DIR}/porth/asmt/prefix_asmt.c" -s "prefix_asmt"
+  COMMAND "$<TARGET_FILE:embed>" "${PROJECT_SOURCE_DIR}/porth/asmt/suffix.asmt"
+          -o "${PROJECT_BINARY_DIR}/porth/asmt/suffix_asmt.c" -s "suffix_asmt"
 )
-target_sources(porth PRIVATE "${PROJECT_BINARY_DIR}/porth/asmt/main_asmt.c")
+target_sources(
+  porth PRIVATE "${PROJECT_BINARY_DIR}/porth/asmt/prefix_asmt.c"
+                "${PROJECT_BINARY_DIR}/porth/asmt/suffix_asmt.c"
+)
 target_include_directories(porth PRIVATE "${PROJECT_BINARY_DIR}/porth/asmt")
